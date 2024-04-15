@@ -45,11 +45,12 @@ float3 EyeReflection(
     float2 UV = CenterUV - float2(0.5f, 0.5f);
 
     float2 m, r;
-    r = (length(UV) - (IrisUVRadius - LimbusUVWidth.x)) / LimbusUVWidth.y;
+    r = (length(UV) - (IrisUVRadius - LimbusUVWidth)) / LimbusUVWidth;
  
    
     m = saturate(1 - r);
     m = smoothstep(0, 1, m);
+
 
     //Reflection direction
 	float airIoR = 1.00029;
@@ -59,7 +60,7 @@ float3 EyeReflection(
 	float k = sqrt(1 + (w - n) * (w + n));
 	float3 t;
 	t = (w - k) * normalW - n * cameraW;
-	t = -normalize(t);
+	t = -normalize(t)  ;
 
 
     //Scale the reflection direction
@@ -73,21 +74,20 @@ float3 EyeReflection(
 
 
     //Find tangent space coordinate
-	float3 EyeTangent = normalize( Tangent -(dot(Tangent, EyeNormal) * EyeNormal)  );
+	float3 EyeTangent = normalize( Tangent - dot(Tangent, EyeNormal) * EyeNormal)   ;
 	float TangentOffset = dot(EyeTangent, ScaleDir);
 	float3 Binorm = cross(EyeTangent, EyeNormal);
 	float BinomOffset = dot(Binorm, ScaleDir);
 	float2 RefractedUVOffset = float2(TangentOffset, BinomOffset);
 
-
     
-	float2 ScaleOffset = float2(-1, 1) * IrisUVRadius * RefractedUVOffset;
+	float2 ScaleOffset =-1* IrisUVRadius * RefractedUVOffset;
 	float2 RefractedUV = CenterUV + ScaleOffset;
 	RefractedUV = lerp(CenterUV, RefractedUV, m.r);
     
     //Scale Iris texture coordinates up by this amount before sampling iris
 	float2 AjuastUV = (RefractedUV - 0.5) * (1 / (2 * IrisUVRadius)) + 0.5;
-//  return half3(AjuastUV.x , AjuastUV.y,0);
+
 
     //Scale the Pupil
     // Scale UVs from from unit circle in or out from center

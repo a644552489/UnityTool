@@ -184,7 +184,7 @@
         // #endif
         // already normalized from normal transform to WS.
         output.normalWS = normalInput.normalWS;
-        output.viewDirWS = viewDirWS;
+        output.viewDirWS =SafeNormalize( viewDirWS);
        // #if defined(REQUIRES_WORLD_SPACE_TANGENT_INTERPOLATOR) || defined(REQUIRES_TANGENT_SPACE_VIEW_DIR_INTERPOLATOR)
             real sign = input.tangentOS.w * GetOddNegativeScale();
             half4 tangentWS = half4(normalInput.tangentWS.xyz, sign);
@@ -230,19 +230,20 @@
         float3x3 tbn = float3x3(input.tangentWS.xyz ,bitangentWS, input.normalWS);
         EyeNormal =( TransformTangentToWorld(EyeNormal ,tbn)); 
 
-       // float3 tangent =normalize( TransformTangentToWorld( float3(1,0,0) ,tbn));
-        float3 tangent = input.tangentWS.xyz;
+        float3 tangent =normalize( TransformTangentToWorld( float3(1,0,0) ,tbn));
 
        
-        float3 cameraDir =GetWorldSpaceViewDir( input.positionWS );
-     //   cameraDir= reflect(-cameraDir , input.normalWS);
+        // float3 cameraDir =normalize( input.positionWS - _WorldSpaceCameraPos );
+        // cameraDir= reflect(cameraDir , input.normalWS);
      
 
         float3 Eye = EyeReflection(input.uv , _ScaleByCenter ,_IrisRadius, _LimbusUVWidth ,_IOR ,input.normalWS ,
-                 cameraDir , EyeDepth , _DepthScale ,EyeNormal ,tangent ,_PupilRadius ,_LimbusUVWidthShading ,_PosOffset);
+                 input.viewDirWS , EyeDepth , _DepthScale ,EyeNormal ,tangent ,_PupilRadius ,_LimbusUVWidthShading ,_PosOffset);
         float4 Iris = SAMPLE_TEXTURE2D(_IrisTex , sampler_IrisTex , Eye.xy);
         float4 IrisMask = SAMPLE_TEXTURE2D(_IrisMask ,sampler_IrisMask , input.uv);
 
+  
+        
         float3 eye = lerp(IrisMask.xyz ,Iris.xyz ,Eye.z);
 
         SurfaceData surfaceData ;

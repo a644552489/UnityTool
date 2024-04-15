@@ -274,6 +274,13 @@ float Hash21(float2 uv)
     uv += dot(uv , uv + 45.32);
     return frac(uv.x *uv.y);
 }
+inline float2 ParallaxOffset( half h, half height, half3 viewDir )
+    {
+        h = h * height - height/2.0;
+        float3 v = normalize(viewDir);
+        v.z += 0.42;
+        return h * (v.xy / v.z);
+    }
 
 
 

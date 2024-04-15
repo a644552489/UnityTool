@@ -98,8 +98,9 @@ _LimbusUVWidthShading("DepthOffset" , Range(0,1))=0
             
             #pragma vertex LitPassVertex
             #pragma fragment LitPassFragment
-            #include "./Eye.hlsl"
+        
             #include "Actor-New-EyeInput.hlsl"
+                #include "./Eye.hlsl"
             #include "Actor-New-EyePass.hlsl"
             ENDHLSL
         }
