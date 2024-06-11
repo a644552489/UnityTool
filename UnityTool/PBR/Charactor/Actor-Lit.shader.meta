@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: bf77ef28290e03a4aa530295a02e143d
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _BaseMap: {instanceID: 0}
+  - _BumpMap: {instanceID: 0}
+  - _MSAMap: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
